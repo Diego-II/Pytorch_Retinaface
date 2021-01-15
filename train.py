@@ -5,6 +5,7 @@ import torch.optim as optim
 import torch.backends.cudnn as cudnn
 import argparse
 import torch.utils.data as data
+from sam.sam import SAM
 from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50
 from layers.modules import MultiBoxLoss
 from layers.functions.prior_box import PriorBox
@@ -23,6 +24,7 @@ parser.add_argument('--resume_net', default=None, help='resume net for retrainin
 parser.add_argument('--resume_epoch', default=0, type=int, help='resume iter for retraining')
 parser.add_argument('--weight_decay', default=5e-4, type=float, help='Weight decay for SGD')
 parser.add_argument('--gamma', default=0.1, type=float, help='Gamma update for SGD')
+parser.add_argument('--sam', default=False, type=bool, help='Use SAM optimizer.')
 parser.add_argument('--save_folder', default='./weights/', help='Location to save checkpoint models')
 
 args = parser.parse_args()
@@ -77,8 +79,12 @@ else:
 
 cudnn.benchmark = True
 
+if args.sam:
+    base_optimizer = optim.SGD
+    optimizer = optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
+else:
+    optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 
-optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 criterion = MultiBoxLoss(num_classes, 0.35, True, 0, True, 7, 0.35, False)
 
 priorbox = PriorBox(cfg, image_size=(img_dim, img_dim))
@@ -126,11 +132,27 @@ def train():
         out = net(images)
 
         # backprop
-        optimizer.zero_grad()
+        if args.sam:
+            # optimizer.first_step(zero_grad=True)
+            pass
+        else:
+            optimizer.zero_grad()
+        
         loss_l, loss_c, loss_landm = criterion(out, priors, targets)
         loss = cfg['loc_weight'] * loss_l + loss_c + loss_landm
         loss.backward()
-        optimizer.step()
+        # Fix to support sam.fisrt_step and sam.second_step:
+        if args.sam:
+            optimizer.first_step()
+
+            out_2 = net(images)
+            temp_loss_l, temp_loss_c, temp_loss_landm = criterion(out_2, priors, targets)
+            temp_loss = cfg['loc_weight'] * temp_loss_l + temp_loss_c + temp_loss_landm
+            temp_loss.backward()
+            optimizer.second_step()
+        else:
+            optimizer.step()    
+
         load_t1 = time.time()
         batch_time = load_t1 - load_t0
         eta = int(batch_time * (max_iter - iteration))
