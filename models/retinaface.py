@@ -94,11 +94,12 @@ class RetinaFace(nn.Module):
             import torchvision.models as models
             backbone = models.resnet50(pretrained=cfg['pretrain'])
         
-        elif cfg['name'] == 'efficientnet':
+        elif cfg['name'] == 'efficientnet-b5':
             self.body = EfficientNet()
         
-        if cfg['name'] != 'efficientnet':
+        if cfg['name'] != 'efficientnet-b5':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
+
         in_channels_stage2 = cfg['in_channel']
         in_channels_list = [
             in_channels_stage2 * 2,
