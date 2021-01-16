@@ -45,7 +45,7 @@ class LandmarkHead(nn.Module):
 
         return out.view(out.shape[0], -1, 10)
 
-from efficientnet_pytorch import EfficientNet as EffNet
+from ./efficientnet_pytorch import EfficientNet as EffNet
 class EfficientNet(nn.Module):
     def __init__(self, ):
         super(EfficientNet, self).__init__()
