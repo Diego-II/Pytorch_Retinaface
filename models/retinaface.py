@@ -45,6 +45,31 @@ class LandmarkHead(nn.Module):
 
         return out.view(out.shape[0], -1, 10)
 
+from efficientnet_pytorch import EfficientNet as EffNet
+class EfficientNet(nn.Module):
+    def __init__(self, ):
+        super(EfficientNet, self).__init__()
+        model = EffNet.from_pretrained('efficientnet-b5')
+        del model._conv_head
+        del model._bn1
+        del model._avg_pooling
+        del model._dropout
+        del model._fc
+        self.model = model
+
+    def forward(self, x):
+        x = self.model._swish(self.model._bn0(self.model._conv_stem(x)))
+        feature_maps = []
+        for idx, block in enumerate(self.model._blocks):
+            drop_connect_rate = self.model._global_params.drop_connect_rate
+            if drop_connect_rate:
+                drop_connect_rate *= float(idx) / len(self.model._blocks)
+            x = block(x, drop_connect_rate=drop_connect_rate)
+            if block._depthwise_conv.stride == [2, 2]:
+                feature_maps.append(x)
+
+        return feature_maps[1:]
+
 class RetinaFace(nn.Module):
     def __init__(self, cfg = None, phase = 'train'):
         """
@@ -70,10 +95,10 @@ class RetinaFace(nn.Module):
             backbone = models.resnet50(pretrained=cfg['pretrain'])
         
         elif cfg['name'] == 'efficientnet':
-            from efficientnet_pytorch import EfficientNet
-            backbone = EfficientNet.from_pretrained("efficientnet-b5", advprop=True)
-
-        self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
+            self.body = EfficientNet()
+        
+        if cfg['name'] != 'efficientnet':
+            self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
         in_channels_stage2 = cfg['in_channel']
         in_channels_list = [
             in_channels_stage2 * 2,
