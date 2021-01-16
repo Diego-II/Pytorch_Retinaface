@@ -9,7 +9,7 @@ from models.net import MobileNetV1 as MobileNetV1
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 
-
+from efficientnet_pytorch.model import EfficientNet as EffNet
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
@@ -45,7 +45,6 @@ class LandmarkHead(nn.Module):
 
         return out.view(out.shape[0], -1, 10)
 
-from ./efficientnet_pytorch import EfficientNet as EffNet
 class EfficientNet(nn.Module):
     def __init__(self, ):
         super(EfficientNet, self).__init__()
