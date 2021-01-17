@@ -80,7 +80,10 @@ class FPN(nn.Module):
 
     def forward(self, input):
         # names = list(input.keys())
-        input = list(input.values())
+        if cfg['name'] == 'efficientnet-b0':
+            input = input    
+        else:
+            input = list(input.values())
 
         output1 = self.output1(input[0])
         output2 = self.output2(input[1])
