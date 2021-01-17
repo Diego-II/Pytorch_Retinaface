@@ -68,6 +68,7 @@ class SSH(nn.Module):
 class FPN(nn.Module):
     def __init__(self,in_channels_list,out_channels, cfg=None):
         super(FPN,self).__init__()
+        self.cfg = cfg
         leaky = 0
         if (out_channels <= 64):
             leaky = 0.1
@@ -80,7 +81,7 @@ class FPN(nn.Module):
 
     def forward(self, input):
         # names = list(input.keys())
-        if cfg['name'] == 'efficientnet-b0':
+        if self.cfg['name'] == 'efficientnet-b0':
             input = input    
         else:
             input = list(input.values())
