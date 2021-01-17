@@ -42,7 +42,7 @@ cfg_re50 = {
 
 
 cfg_efficient_net = {
-    'name': 'efficientnet-b5',
+    'name': 'efficientnet-b0',
     'min_sizes': [[16, 32], [64, 128], [256, 512]],
     'steps': [8, 16, 32],
     'variance': [0.1, 0.2],

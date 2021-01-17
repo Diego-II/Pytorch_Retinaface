@@ -49,7 +49,7 @@ class LandmarkHead(nn.Module):
 class EfficientNet(nn.Module):
     def __init__(self, ):
         super(EfficientNet, self).__init__()
-        model = EffNet.from_pretrained('efficientnet-b5')
+        model = EffNet.from_pretrained('efficientnet-b0')
         del model._conv_head
         del model._bn1
         del model._avg_pooling
@@ -94,10 +94,10 @@ class RetinaFace(nn.Module):
             import torchvision.models as models
             backbone = models.resnet50(pretrained=cfg['pretrain'])
         
-        elif cfg['name'] == 'efficientnet-b5':
+        elif cfg['name'] == 'efficientnet-b0':
             self.body = EfficientNet()
         
-        if cfg['name'] != 'efficientnet-b5':
+        if cfg['name'] != 'efficientnet-b0':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
 
         in_channels_stage2 = cfg['in_channel']
