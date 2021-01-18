@@ -9,8 +9,7 @@ from models.net import MobileNetV1 as MobileNetV1
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 
-from models.efficientnet_pytorch.model import EfficientNet as EffNet
-
+from models.efficientnet_pytorch.model import EfficientNet
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
@@ -49,7 +48,7 @@ class LandmarkHead(nn.Module):
 class EfficientNet(nn.Module):
     def __init__(self, ):
         super(EfficientNet, self).__init__()
-        model = EffNet.from_pretrained('efficientnet-b0')
+        model = EffNet.from_pretrained('efficientnet-b4')
         del model._conv_head
         del model._bn1
         del model._avg_pooling
@@ -94,10 +93,10 @@ class RetinaFace(nn.Module):
             import torchvision.models as models
             backbone = models.resnet50(pretrained=cfg['pretrain'])
         
-        elif cfg['name'] == 'efficientnet-b0':
-            self.body = EfficientNet()
+        elif cfg['name'] == 'efficientnet-b4':
+            self.body = EfficientNet.from_pretrained('efficientnet-b4')
         
-        if cfg['name'] != 'efficientnet-b0':
+        if cfg['name'] != 'efficientnet-b4':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
 
         in_channels_stage2 = cfg['in_channel']
@@ -107,7 +106,7 @@ class RetinaFace(nn.Module):
             in_channels_stage2 * 8,
         ]
         out_channels = cfg['out_channel']
-        self.fpn = FPN(in_channels_list,out_channels, cfg)
+        self.fpn = FPN(in_channels_list,out_channels)
         self.ssh1 = SSH(out_channels, out_channels)
         self.ssh2 = SSH(out_channels, out_channels)
         self.ssh3 = SSH(out_channels, out_channels)
@@ -135,7 +134,11 @@ class RetinaFace(nn.Module):
         return landmarkhead
 
     def forward(self,inputs):
-        out = self.body(inputs)
+
+        if cfg['name'] == 'efficientnet-b4':
+            out = self.body.extract_endpoints(inputs)
+        else:
+            out = self.body(inputs)
 
         # FPN
         fpn = self.fpn(out)

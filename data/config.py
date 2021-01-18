@@ -42,7 +42,7 @@ cfg_re50 = {
 
 
 cfg_efficient_net = {
-    'name': 'efficientnet-b0',
+    'name': 'efficientnet-b4',
     'min_sizes': [[16, 32], [64, 128], [256, 512]],
     'steps': [8, 16, 32],
     'variance': [0.1, 0.2],
@@ -56,7 +56,7 @@ cfg_efficient_net = {
     'decay2': 220,  
     'image_size': 640,
     'pretrain': True,
-    'return_layers': {'stage1': 1, 'stage2': 2, 'stage3': 3},
+    'return_layers': {'reduction_1': 1, 'reduction_3': 2, 'reduction_5': 3},
     'in_channel': 32,
     'out_channel': 64
 }
