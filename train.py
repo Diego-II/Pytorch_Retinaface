@@ -132,7 +132,7 @@ def train():
         if iteration in stepvalues:
             step_index += 1
         # lr = adjust_learning_rate(optimizer, gamma, epoch, step_index, iteration, epoch_size)
-
+        lr = scheduler.get_lr()
         # load train data
         images, targets = next(batch_iterator)
         images = images.cuda()
