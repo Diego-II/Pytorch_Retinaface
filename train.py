@@ -58,11 +58,11 @@ save_folder = args.save_folder
 
 net = RetinaFace(cfg=cfg)
 print("Printing net...")
-# print(net)
+print(net)
 
-test_model = net.cuda()
-# Le pasamos un tensor de prueba para verificar que las dimensiones esten bien
-summary(test_model, input_size=(3, img_dim, img_dim))
+# test_model = net.cuda()
+# # Le pasamos un tensor de prueba para verificar que las dimensiones esten bien
+# summary(test_model, input_size=(3, img_dim, img_dim))
 
 if args.resume_net is not None:
     print('Loading resume network...')
