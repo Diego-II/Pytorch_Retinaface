@@ -9,7 +9,7 @@ from models.net import MobileNetV1 as MobileNetV1
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 
-from models.efficientnet_pytorch.model import EfficientNet
+from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
@@ -44,30 +44,6 @@ class LandmarkHead(nn.Module):
         out = out.permute(0,2,3,1).contiguous()
 
         return out.view(out.shape[0], -1, 10)
-
-class EfficientNet(nn.Module):
-    def __init__(self, ):
-        super(EfficientNet, self).__init__()
-        model = EffNet.from_pretrained('efficientnet-b4')
-        del model._conv_head
-        del model._bn1
-        del model._avg_pooling
-        del model._dropout
-        del model._fc
-        self.model = model
-
-    def forward(self, x):
-        x = self.model._swish(self.model._bn0(self.model._conv_stem(x)))
-        feature_maps = []
-        for idx, block in enumerate(self.model._blocks):
-            drop_connect_rate = self.model._global_params.drop_connect_rate
-            if drop_connect_rate:
-                drop_connect_rate *= float(idx) / len(self.model._blocks)
-            x = block(x, drop_connect_rate=drop_connect_rate)
-            if block._depthwise_conv.stride == [2, 2]:
-                feature_maps.append(x)
-
-        return feature_maps[1:]
 
 class RetinaFace(nn.Module):
     def __init__(self, cfg = None, phase = 'train'):
