@@ -58,5 +58,5 @@ cfg_efficient_net = {
     'pretrain': True,
     'return_layers': {'reduction_1': 1, 'reduction_3': 2, 'reduction_5': 3},
     'in_channel': 32,
-    'out_channel': 64
+    'out_channel': 24
 }
