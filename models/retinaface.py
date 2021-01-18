@@ -52,6 +52,7 @@ class RetinaFace(nn.Module):
         :param phase: train or test.
         """
         super(RetinaFace,self).__init__()
+        self.cfg = cfg
         self.phase = phase
         backbone = None
         if cfg['name'] == 'mobilenet0.25':
@@ -71,6 +72,7 @@ class RetinaFace(nn.Module):
         
         elif cfg['name'] == 'efficientnet-b4':
             self.body = EfficientNet.from_pretrained('efficientnet-b4')
+
         
         if cfg['name'] != 'efficientnet-b4':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
@@ -111,7 +113,7 @@ class RetinaFace(nn.Module):
 
     def forward(self,inputs):
 
-        if cfg['name'] == 'efficientnet-b4':
+        if self.cfg['name'] == 'efficientnet-b4':
             out = self.body.extract_endpoints(inputs)
         else:
             out = self.body(inputs)
