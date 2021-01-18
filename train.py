@@ -92,6 +92,9 @@ if args.sam:
 else:
     optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 
+steps = 15
+scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, steps)
+
 criterion = MultiBoxLoss(num_classes, 0.35, True, 0, True, 7, 0.35, False)
 
 priorbox = PriorBox(cfg, image_size=(img_dim, img_dim))
@@ -128,7 +131,7 @@ def train():
         load_t0 = time.time()
         if iteration in stepvalues:
             step_index += 1
-        lr = adjust_learning_rate(optimizer, gamma, epoch, step_index, iteration, epoch_size)
+        # lr = adjust_learning_rate(optimizer, gamma, epoch, step_index, iteration, epoch_size)
 
         # load train data
         images, targets = next(batch_iterator)
@@ -160,6 +163,8 @@ def train():
         else:
             optimizer.step()    
 
+        scheduler.step()
+        
         load_t1 = time.time()
         batch_time = load_t1 - load_t0
         eta = int(batch_time * (max_iter - iteration))
