@@ -79,7 +79,7 @@ class RetinaFace(nn.Module):
 
         if cfg['name'] == 'efficientnet-b4':
             in_channels_list = [
-            24,  32, 1280,
+            24,  32, 56,
         ]    
         else:
             in_channels_stage2 = cfg['in_channel']
