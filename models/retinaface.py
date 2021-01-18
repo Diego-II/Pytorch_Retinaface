@@ -9,8 +9,7 @@ from models.net import MobileNetV1 as MobileNetV1
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 
-from models.efficientnet_pytorch.model import EfficientNet as EffNet
-
+from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
@@ -46,30 +45,6 @@ class LandmarkHead(nn.Module):
 
         return out.view(out.shape[0], -1, 10)
 
-class EfficientNet(nn.Module):
-    def __init__(self, ):
-        super(EfficientNet, self).__init__()
-        model = EffNet.from_pretrained('efficientnet-b0')
-        del model._conv_head
-        del model._bn1
-        del model._avg_pooling
-        del model._dropout
-        del model._fc
-        self.model = model
-
-    def forward(self, x):
-        x = self.model._swish(self.model._bn0(self.model._conv_stem(x)))
-        feature_maps = []
-        for idx, block in enumerate(self.model._blocks):
-            drop_connect_rate = self.model._global_params.drop_connect_rate
-            if drop_connect_rate:
-                drop_connect_rate *= float(idx) / len(self.model._blocks)
-            x = block(x, drop_connect_rate=drop_connect_rate)
-            if block._depthwise_conv.stride == [2, 2]:
-                feature_maps.append(x)
-
-        return feature_maps[1:]
-
 class RetinaFace(nn.Module):
     def __init__(self, cfg = None, phase = 'train'):
         """
@@ -77,6 +52,7 @@ class RetinaFace(nn.Module):
         :param phase: train or test.
         """
         super(RetinaFace,self).__init__()
+        self.cfg = cfg
         self.phase = phase
         backbone = None
         if cfg['name'] == 'mobilenet0.25':
@@ -94,20 +70,26 @@ class RetinaFace(nn.Module):
             import torchvision.models as models
             backbone = models.resnet50(pretrained=cfg['pretrain'])
         
-        elif cfg['name'] == 'efficientnet-b0':
-            self.body = EfficientNet()
+        elif cfg['name'] == 'efficientnet-b4':
+            self.body = EfficientNet.from_pretrained('efficientnet-b4')
+
         
-        if cfg['name'] != 'efficientnet-b0':
+        if cfg['name'] != 'efficientnet-b4':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
 
-        in_channels_stage2 = cfg['in_channel']
-        in_channels_list = [
-            in_channels_stage2 * 2,
-            in_channels_stage2 * 4,
-            in_channels_stage2 * 8,
-        ]
+        if cfg['name'] == 'efficientnet-b4':
+            in_channels_list = [
+            24,  32, 56,
+        ]    
+        else:
+            in_channels_stage2 = cfg['in_channel']
+            in_channels_list = [
+                in_channels_stage2 * 2,
+                in_channels_stage2 * 4,
+                in_channels_stage2 * 8,
+            ]
         out_channels = cfg['out_channel']
-        self.fpn = FPN(in_channels_list,out_channels, cfg)
+        self.fpn = FPN(in_channels_list,out_channels)
         self.ssh1 = SSH(out_channels, out_channels)
         self.ssh2 = SSH(out_channels, out_channels)
         self.ssh3 = SSH(out_channels, out_channels)
@@ -135,7 +117,11 @@ class RetinaFace(nn.Module):
         return landmarkhead
 
     def forward(self,inputs):
-        out = self.body(inputs)
+
+        if self.cfg['name'] == 'efficientnet-b4':
+            out = self.body.extract_endpoints(inputs)
+        else:
+            out = self.body(inputs)
 
         # FPN
         fpn = self.fpn(out)

@@ -3,6 +3,7 @@ import os
 import torch
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
+from torchsummary import summary
 import argparse
 import torch.utils.data as data
 from sam.sam import SAM
@@ -59,6 +60,10 @@ net = RetinaFace(cfg=cfg)
 print("Printing net...")
 print(net)
 
+# test_model = net.cuda()
+# # Le pasamos un tensor de prueba para verificar que las dimensiones esten bien
+# summary(test_model, input_size=(3, img_dim, img_dim))
+
 if args.resume_net is not None:
     print('Loading resume network...')
     state_dict = torch.load(args.resume_net)
@@ -86,6 +91,9 @@ if args.sam:
     optimizer = optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 else:
     optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
+
+steps = 15
+scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, steps)
 
 criterion = MultiBoxLoss(num_classes, 0.35, True, 0, True, 7, 0.35, False)
 
@@ -123,7 +131,7 @@ def train():
         load_t0 = time.time()
         if iteration in stepvalues:
             step_index += 1
-        lr = adjust_learning_rate(optimizer, gamma, epoch, step_index, iteration, epoch_size)
+        # lr = adjust_learning_rate(optimizer, gamma, epoch, step_index, iteration, epoch_size)
 
         # load train data
         images, targets = next(batch_iterator)
@@ -155,6 +163,8 @@ def train():
         else:
             optimizer.step()    
 
+        scheduler.step()
+        
         load_t1 = time.time()
         batch_time = load_t1 - load_t0
         eta = int(batch_time * (max_iter - iteration))
