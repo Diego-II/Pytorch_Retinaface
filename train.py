@@ -3,6 +3,7 @@ import os
 import torch
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
+from torchsummary import summary
 import argparse
 import torch.utils.data as data
 from sam.sam import SAM
@@ -57,7 +58,11 @@ save_folder = args.save_folder
 
 net = RetinaFace(cfg=cfg)
 print("Printing net...")
-print(net)
+# print(net)
+
+test_model = net.cuda()
+# Le pasamos un tensor de prueba para verificar que las dimensiones esten bien
+summary(test_model, input_size=(3, img_dim, img_dim))
 
 if args.resume_net is not None:
     print('Loading resume network...')
