@@ -10,8 +10,16 @@ from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 from models.net import MobileNetV1 as MobileNetV1
-from models.TResNet.models import create_model, load_tresnetm
+from models.TResNet.models import create_model
 from models.TResNet.models.tresnet import TResnetM
+
+def load_tresnetm():
+    url = 'https://miil-public-eu.oss-eu-central-1.aliyuncs.com/model-zoo/tresnet/tresnet_m_448.pth'
+    weights_m = torch.hub.load_state_dict_from_url(url)
+    model = TResnetM()
+    model.load_state_dict(weights_m)
+
+    return model
 
 
 class ClassHead(nn.Module):
