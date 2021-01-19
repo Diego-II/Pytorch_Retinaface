@@ -92,7 +92,7 @@ cudnn.benchmark = True
 
 if args.optimizer == 'AdaB' and args.sam:
     base_optimizer = my_optim.AdaBoundW
-    optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
+    optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr,weight_decay=weight_decay)
 
 elif args.optimizer == 'AdaB' and not args.sam:
     optimizer = my_optim.AdaBoundW(net.parameters(), lr=initial_lr, final_lr=0.1)
