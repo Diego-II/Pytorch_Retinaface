@@ -7,7 +7,7 @@ from torchsummary import summary
 import argparse
 import torch.utils.data as data
 from sam.sam import SAM
-from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_efficient_net, cfg_trenet
+from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_efficient_net, cfg_tresnet
 from layers.modules import MultiBoxLoss
 import layers.modules.optim as my_optim
 from layers.functions.prior_box import PriorBox
