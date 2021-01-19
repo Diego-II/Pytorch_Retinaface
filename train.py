@@ -8,7 +8,8 @@ import argparse
 import torch.utils.data as data
 from sam.sam import SAM
 from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_efficient_net
-from layers.modules import MultiBoxLoss, AdaBound
+from layers.modules import MultiBoxLoss
+import layers.modules.optim as optim
 from layers.functions.prior_box import PriorBox
 import time
 import datetime
@@ -90,11 +91,11 @@ cudnn.benchmark = True
 # https://github.com/Luolc/AdaBound
 
 if args.optimizer == 'AdaB' and args.sam:
-    base_optimizer = AdaBound(net.parameters(), lr=initial_lr, final_lr=0.1)
+    base_optimizer = optim.AdaBoundW(net.parameters(), lr=initial_lr, final_lr=0.1)
     optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 
 elif args.optimizer == 'AdaB' and not args.sam:
-    optimizer = AdaBound(net.parameters(), lr=initial_lr, final_lr=0.1)
+    optimizer = optim.AdaBoundW(net.parameters(), lr=initial_lr, final_lr=0.1)
 
 elif args.optimizer == 'SDG' and args.sam:
     base_optimizer = optim.SGD
