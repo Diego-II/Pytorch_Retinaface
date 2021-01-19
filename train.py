@@ -8,7 +8,7 @@ import argparse
 import torch.utils.data as data
 from sam.sam import SAM
 from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_efficient_net
-from layers.modules import MultiBoxLoss
+from layers.modules import MultiBoxLoss, AdaBound
 from layers.functions.prior_box import PriorBox
 import time
 import datetime
@@ -26,6 +26,7 @@ parser.add_argument('--resume_epoch', default=0, type=int, help='resume iter for
 parser.add_argument('--weight_decay', default=5e-4, type=float, help='Weight decay for SGD')
 parser.add_argument('--gamma', default=0.1, type=float, help='Gamma update for SGD')
 parser.add_argument('--sam', default=False, type=bool, help='Use SAM optimizer.')
+parser.add_argument('--optimizer', default='SDG', help='Optimizer to use.')
 parser.add_argument('--save_folder', default='./weights/', help='Location to save checkpoint models')
 
 args = parser.parse_args()
@@ -60,7 +61,7 @@ net = RetinaFace(cfg=cfg)
 print("Printing net...")
 print(net)
 
-# test_model = net.cuda()
+# test_model = net.cuda()   
 # # Le pasamos un tensor de prueba para verificar que las dimensiones esten bien
 # summary(test_model, input_size=(3, img_dim, img_dim))
 
@@ -86,9 +87,18 @@ else:
 
 cudnn.benchmark = True
 
-if args.sam:
+# https://github.com/Luolc/AdaBound
+
+if args.optimizer == 'AdaB' and args.sam:
+    base_optimizer = AdaBound(net.parameters(), lr=initial_lr, final_lr=0.1)
+    optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
+
+elif args.optimizer == 'AdaB' and not args.sam:
+    optimizer = AdaBound(net.parameters(), lr=initial_lr, final_lr=0.1)
+
+elif args.optimizer == 'SDG' and args.sam:
     base_optimizer = optim.SGD
-    optimizer = optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
+    optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 else:
     optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 
