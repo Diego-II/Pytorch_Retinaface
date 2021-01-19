@@ -15,6 +15,8 @@ import time
 import datetime
 import math
 from models.retinaface import RetinaFace
+from adamp import SGDP
+
 
 parser = argparse.ArgumentParser(description='Retinaface Training')
 parser.add_argument('--training_dataset', default='./data/widerface/train/label.txt', help='Training dataset directory')
@@ -100,6 +102,8 @@ elif args.optimizer == 'AdaB' and not args.sam:
 elif args.optimizer == 'SDG' and args.sam:
     base_optimizer = optim.SGD
     optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
+elif args.optimizer == 'SDGP':
+    optimizer = SGDP(net.parameters(), lr=0.1, weight_decay=1e-5, momentum=0.9, nesterov=True)
 else:
     optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 
