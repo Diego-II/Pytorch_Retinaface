@@ -45,7 +45,7 @@ elif args.network == "resnet50":
 elif args.network == 'efficientnet':
     cfg = cfg_efficient_net
 elif args.network == 'tresnet':
-    cfg = cfg_trenet
+    cfg = cfg_tresnet
 
 rgb_mean = (104, 117, 123) # bgr order
 num_classes = 2
@@ -166,8 +166,8 @@ def train():
         else:
             optimizer.zero_grad()
         
-        print(f'Oout size = {out.size}')
-        print(f'Oout size = {targets.size}')
+        # print(f'Oout size = {out.size}')
+        # print(f'Oout size = {targets.size}')
         loss_l, loss_c, loss_landm = criterion(out, priors, targets)
         loss = cfg['loc_weight'] * loss_l + loss_c + loss_landm
         loss.backward()
