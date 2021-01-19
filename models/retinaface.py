@@ -9,6 +9,8 @@ from models.net import MobileNetV1 as MobileNetV1
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 
+from TResNet.models.tresnet import TResnetM
+from TResNet.models import create_model
 from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
 
 class ClassHead(nn.Module):
@@ -76,6 +78,9 @@ class RetinaFace(nn.Module):
         
         if cfg['name'] != 'efficientnet-b4':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
+        
+        if cfg['name'] == 'tresnet':
+            backbone = TResNetM()
 
         if cfg['name'] == 'efficientnet-b4':
             in_channels_list = [
