@@ -1,7 +1,5 @@
 import logging
 
-import torch
-
 logger = logging.getLogger(__name__)
 
 from ..tresnet import TResnetL, TResnetM, TResnetXL
@@ -23,13 +21,5 @@ def create_model(args):
     else:
         print("model: {} not found !!".format(args.model_name))
         exit(-1)
-
-    return model
-
-def load_tresnetm():
-    url = 'https://miil-public-eu.oss-eu-central-1.aliyuncs.com/model-zoo/tresnet/tresnet_m_448.pth'
-    weights_m = torch.hub.load_state_dict_from_url(url)
-    model = TResnetM()
-    model.load_state_dict(weights_m)
 
     return model
