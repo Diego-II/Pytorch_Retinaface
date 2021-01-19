@@ -3,10 +3,10 @@ from functools import partial
 import torch
 import torch.nn as nn
 from collections import OrderedDict
-from TResNet.models.tresnet.layers.anti_aliasing import AntiAliasDownsampleLayer
+from .layers.anti_aliasing import AntiAliasDownsampleLayer
 from .layers.avg_pool import FastGlobalAvgPool2d
 from .layers.squeeze_and_excite import SEModule
-from TResNet.models.tresnet.layers.space_to_depth import SpaceToDepthModule
+from .layers.space_to_depth import SpaceToDepthModule
 from inplace_abn import InPlaceABN
 
 
