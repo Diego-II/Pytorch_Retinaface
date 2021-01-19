@@ -91,7 +91,7 @@ class RetinaFace(nn.Module):
             backbone = load_tresnetm()
 
         
-        if cfg['name'] == 'efficientnet-b4' or cfg['name'] == 'mobilenet0.25':
+        if cfg['name'] == 'tresnet' or cfg['name'] == 'mobilenet0.25':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
         
 
