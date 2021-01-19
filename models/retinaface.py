@@ -1,15 +1,21 @@
-import torch
-import torch.nn as nn
-import torchvision.models.detection.backbone_utils as backbone_utils
-import torchvision.models._utils as _utils
-import torch.nn.functional as F
 from collections import OrderedDict
 
-from models.net import MobileNetV1 as MobileNetV1
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision.models._utils as _utils
+import torchvision.models.detection.backbone_utils as backbone_utils
+
 from models.net import FPN as FPN
 from models.net import SSH as SSH
+from models.net import MobileNetV1 as MobileNetV1
 
-from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
+def load_tresnetm():
+    from torch_tresnet import tresnet_m_448
+    model = tresnet_m_448(pretrained=True)
+
+    return model
+
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
@@ -69,18 +75,15 @@ class RetinaFace(nn.Module):
         elif cfg['name'] == 'Resnet50':
             import torchvision.models as models
             backbone = models.resnet50(pretrained=cfg['pretrain'])
-        
-        elif cfg['name'] == 'efficientnet-b4':
-            self.body = EfficientNet.from_pretrained('efficientnet-b4')
+
+        elif cfg['name'] == 'tresnet':
+            model = load_tresnetm()
+            self.body = model.body
 
         
-        if cfg['name'] != 'efficientnet-b4':
+        if cfg['name'] == 'mobilenet0.25' or cfg['name'] == 'Resnet50':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
-
-        if cfg['name'] == 'efficientnet-b4':
-            in_channels_list = [
-            24,  32, 56,
-        ]    
+        
         else:
             in_channels_stage2 = cfg['in_channel']
             in_channels_list = [
@@ -117,11 +120,7 @@ class RetinaFace(nn.Module):
         return landmarkhead
 
     def forward(self,inputs):
-
-        if self.cfg['name'] == 'efficientnet-b4':
-            out = self.body.extract_endpoints(inputs)
-        else:
-            out = self.body(inputs)
+        out = self.body(inputs)
 
         # FPN
         fpn = self.fpn(out)

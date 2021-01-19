@@ -60,3 +60,23 @@ cfg_efficient_net = {
     'in_channel': 32,
     'out_channel': 64
 }
+
+cfg_tresnet = {
+    'name': 'tresnet',
+    'min_sizes': [[16, 32], [64, 128], [256, 512]],
+    'steps': [8, 16, 32],
+    'variance': [0.1, 0.2],
+    'clip': False,
+    'loc_weight': 2.0,
+    'gpu_train': True,
+    'batch_size':2,
+    'ngpu': 1,
+    'epoch': 100,
+    'decay1': 190,
+    'decay2': 220,  
+    'image_size': 448,
+    'pretrain': True,
+    'return_layers': {'reduction_1': 1, 'reduction_3': 2, 'reduction_5': 3},
+    'in_channel': 32,
+    'out_channel': 64
+}
