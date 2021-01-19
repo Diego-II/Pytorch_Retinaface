@@ -30,7 +30,7 @@ cfg_re50 = {
     'gpu_train': True,
     'batch_size': 32,
     'ngpu': 32,
-    'epoch': 100,
+    'epoch': 150,
     'decay1': 70,
     'decay2': 90,
     'image_size': 640,
