@@ -9,8 +9,6 @@ import torchvision.models.detection.backbone_utils as backbone_utils
 from models.net import FPN as FPN
 from models.net import SSH as SSH
 from models.net import MobileNetV1 as MobileNetV1
-# from models.TResNet.models import create_model
-# from models.TResNet.models.tresnet import TResnetM
 
 def load_tresnetm():
     from torch_tresnet import tresnet_m_448
