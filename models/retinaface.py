@@ -16,7 +16,8 @@ from models.TResNet.models.tresnet import TResnetM
 def load_tresnetm():
     url = 'https://miil-public-eu.oss-eu-central-1.aliyuncs.com/model-zoo/tresnet/tresnet_m_448.pth'
     weights_m = torch.hub.load_state_dict_from_url(url)
-    model = TResnetM()
+    model_params ={ 'num_classes': 1000,'remove_aa_jit': False}
+    model = TResnetM(model_params)
     model.load_state_dict(weights_m)
 
     return model
