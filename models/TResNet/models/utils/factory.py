@@ -1,9 +1,10 @@
 import logging
+
 import torch
 
 logger = logging.getLogger(__name__)
 
-from ..tresnet import TResnetM, TResnetL, TResnetXL
+from ..tresnet import TResnetL, TResnetM, TResnetXL
 
 
 def create_model(args):

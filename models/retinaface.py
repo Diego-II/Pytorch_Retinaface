@@ -1,17 +1,18 @@
-import torch
-import torch.nn as nn
-import torchvision.models.detection.backbone_utils as backbone_utils
-import torchvision.models._utils as _utils
-import torch.nn.functional as F
 from collections import OrderedDict
 
-from models.net import MobileNetV1 as MobileNetV1
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision.models._utils as _utils
+import torchvision.models.detection.backbone_utils as backbone_utils
+
+from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
 from models.net import FPN as FPN
 from models.net import SSH as SSH
+from models.net import MobileNetV1 as MobileNetV1
+from models.TResNet.models import create_model, load_tresnetm
+from models.TResNet.models.tresnet import TResnetM
 
-from TResNet.models.tresnet import TResnetM
-from TResNet.models import create_model, load_tresnetm
-from models.efficientnet_pytorch.model import EfficientNet as EfficientNet
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
