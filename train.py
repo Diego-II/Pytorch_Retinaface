@@ -7,7 +7,7 @@ from torchsummary import summary
 import argparse
 import torch.utils.data as data
 from sam.sam import SAM
-from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_efficient_net, cfg_tresnet
+from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_tresnet
 from layers.modules import MultiBoxLoss
 import layers.modules.optim as my_optim
 from layers.functions.prior_box import PriorBox
@@ -42,8 +42,6 @@ if args.network == "mobile0.25":
     cfg = cfg_mnet
 elif args.network == "resnet50":
     cfg = cfg_re50
-elif args.network == 'efficientnet':
-    cfg = cfg_efficient_net
 elif args.network == 'tresnet':
     cfg = cfg_tresnet
 
