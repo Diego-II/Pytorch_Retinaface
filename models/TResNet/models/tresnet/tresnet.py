@@ -6,7 +6,7 @@ from collections import OrderedDict
 from src.models.tresnet.layers.anti_aliasing import AntiAliasDownsampleLayer
 from .layers.avg_pool import FastGlobalAvgPool2d
 from .layers.squeeze_and_excite import SEModule
-from src.models.tresnet.layers.space_to_depth import SpaceToDepthModule
+from TResNet.models.tresnet.layers.space_to_depth import SpaceToDepthModule
 from inplace_abn import InPlaceABN
 
 
