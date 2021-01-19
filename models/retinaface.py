@@ -84,12 +84,13 @@ class RetinaFace(nn.Module):
         elif cfg['name'] == 'efficientnet-b4':
             self.body = EfficientNet.from_pretrained('efficientnet-b4')
 
+        elif cfg['name'] == 'tresnet':
+            backbone = load_tresnetm()
+
         
-        if cfg['name'] != 'efficientnet-b4':
+        if cfg['name'] == 'efficientnet-b4' or cfg['name'] == 'mobilenet0.25':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
         
-        if cfg['name'] == 'tresnet':
-            backbone = load_tresnetm()
 
         if cfg['name'] == 'efficientnet-b4':
             in_channels_list = [
