@@ -20,7 +20,7 @@ def load_tresnetm():
     # model_params ={ 'num_classes': 1000,'remove_aa_jit': False}
     # model = TResnetM(model_params)
     # model.load_state_dict(weights_m)
-    model = tresnet_m_448(pretrain=True)
+    model = tresnet_m_448(pretrained=True)
 
     return model
 
