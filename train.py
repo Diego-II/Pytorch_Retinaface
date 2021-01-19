@@ -15,7 +15,7 @@ import datetime
 import math
 from models.retinaface import RetinaFace
 from adamp import SGDP
-from models.TResNet.models import *
+
 
 
 parser = argparse.ArgumentParser(description='Retinaface Training')
@@ -64,6 +64,9 @@ net = RetinaFace(cfg=cfg)
 print("Printing net...")
 print(net)
 
+# test_model = net.cuda()   
+# # Le pasamos un tensor de prueba para verificar que las dimensiones esten bien
+# summary(test_model, input_size=(3, img_dim, img_dim))
 
 if args.resume_net is not None:
     print('Loading resume network...')
