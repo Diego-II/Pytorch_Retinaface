@@ -84,13 +84,13 @@ class RetinaFace(nn.Module):
         if cfg['name'] == 'mobilenet0.25' or cfg['name'] == 'Resnet50':
             self.body = _utils.IntermediateLayerGetter(backbone, cfg['return_layers'])
         
-        else:
-            in_channels_stage2 = cfg['in_channel']
-            in_channels_list = [
-                in_channels_stage2 * 2,
-                in_channels_stage2 * 4,
-                in_channels_stage2 * 8,
-            ]
+        
+        in_channels_stage2 = cfg['in_channel']
+        in_channels_list = [
+            in_channels_stage2 * 2,
+            in_channels_stage2 * 4,
+            in_channels_stage2 * 8,
+        ]
         out_channels = cfg['out_channel']
         self.fpn = FPN(in_channels_list,out_channels)
         self.ssh1 = SSH(out_channels, out_channels)
