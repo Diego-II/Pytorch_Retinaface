@@ -2,12 +2,11 @@ import math
 import torch
 from torch.optim import Optimizer
 
-    """
-    https://github.com/Luolc/AdaBound
-    AdaBound implementation taken from the link from above. 
+"""
+https://github.com/Luolc/AdaBound
+AdaBound implementation taken from the link from above. 
 
-    """
-
+"""
 
 class AdaBound(Optimizer):
     """Implements AdaBound algorithm.
