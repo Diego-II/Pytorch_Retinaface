@@ -166,6 +166,8 @@ def train():
         else:
             optimizer.zero_grad()
         
+        print(f'Oout size = {out.size}')
+        print(f'Oout size = {targets.size}')
         loss_l, loss_c, loss_landm = criterion(out, priors, targets)
         loss = cfg['loc_weight'] * loss_l + loss_c + loss_landm
         loss.backward()
