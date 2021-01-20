@@ -123,12 +123,12 @@ class RetinaFace(nn.Module):
         out = self.body(inputs)
 
         # FPN
-        fpn = self.fpn(out)
+        fpn_t = self.fpn(out)
 
         # SSH
-        feature1 = self.ssh1(fpn[0])
-        feature2 = self.ssh2(fpn[1])
-        feature3 = self.ssh3(fpn[2])
+        feature1 = self.ssh1(fpn_t[0])
+        feature2 = self.ssh2(fpn_t[1])
+        feature3 = self.ssh3(fpn_t[2])
         features = [feature1, feature2, feature3]
 
         bbox_regressions = torch.cat([self.BboxHead[i](feature) for i, feature in enumerate(features)], dim=1)
