@@ -127,7 +127,7 @@ class RetinaFace(nn.Module):
         return landmarkhead
 
     def forward(self,inputs):
-        if cfg['name'] == 'tresnet':
+        if self.cfg['name'] == 'tresnet':
             out = self.body.forward_features(inputs)
         else:
             out = self.body(inputs)
