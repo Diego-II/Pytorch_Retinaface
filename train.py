@@ -117,6 +117,7 @@ with torch.no_grad():
 
 def train():
     net.train()
+    net.cuda()
     epoch = 0 + args.resume_epoch
     print('Loading Dataset...')
 
@@ -152,7 +153,7 @@ def train():
         targets = [anno.cuda() for anno in targets]
 
         # forward
-        out = net(images)
+        out = net(images.cuda())
 
         # backprop
         if args.sam:
