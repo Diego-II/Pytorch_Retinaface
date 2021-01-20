@@ -78,9 +78,9 @@ class FPN(nn.Module):
         self.merge1 = conv_bn(out_channels, out_channels, leaky = leaky)
         self.merge2 = conv_bn(out_channels, out_channels, leaky = leaky)
 
-    def forward(self, input):
+    def forward(self, x):
         # names = list(input.keys())
-        input = list(input.values())
+        input = list(x.values())
 
         output1 = self.output1(input[0])
         output2 = self.output2(input[1])
