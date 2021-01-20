@@ -16,6 +16,10 @@ def load_tresnetm():
 
     return model
 
+def load_eff_net():
+    from efficientnet_pytorch import EfficientNet
+    model = EfficientNet.from_pretrained('efficientnet-b5')
+
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
