@@ -85,7 +85,7 @@ class RetinaFace(nn.Module):
 
         elif cfg['name'] == 'tresnet':
             model = load_tresnetm()
-            self.body = model.body
+            # self.body = model.body
 
         
         if cfg['name'] == 'mobilenet0.25' or cfg['name'] == 'Resnet50':
