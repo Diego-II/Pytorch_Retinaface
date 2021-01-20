@@ -11,14 +11,17 @@ from models.net import SSH as SSH
 from models.net import MobileNetV1 as MobileNetV1
 
 def load_tresnetm():
-    from torch_tresnet import tresnet_m_448
-    model = tresnet_m_448(pretrained=True)
+    import timm
+
+    m = timm.create_model('tresnet_m_448', pretrained=True)
+    model = m.forward_features
 
     return model
 
 def load_eff_net():
     from efficientnet_pytorch import EfficientNet
     model = EfficientNet.from_pretrained('efficientnet-b5')
+    return model
 
 
 class ClassHead(nn.Module):
@@ -81,7 +84,7 @@ class RetinaFace(nn.Module):
             backbone = models.resnet50(pretrained=cfg['pretrain'])
 
         elif cfg['name'] == 'tresnet':
-            model = load_tresnetm()
+            model = load_eff_net()
             self.body = model.body
 
         
