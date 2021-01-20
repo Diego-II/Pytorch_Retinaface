@@ -13,7 +13,7 @@ from models.net import MobileNetV1 as MobileNetV1
 def load_tresnetm():
     import timm
 
-    model = timm.create_model('tresnet_m_448', pretrained=True)
+    model = timm.create_model('res2net101_26w_4s', pretrained=True)
     
 
     return model
