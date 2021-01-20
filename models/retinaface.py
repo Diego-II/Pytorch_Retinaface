@@ -84,7 +84,7 @@ class RetinaFace(nn.Module):
             backbone = models.resnet50(pretrained=cfg['pretrain'])
 
         elif cfg['name'] == 'tresnet':
-            model = load_eff_net()
+            model = load_tresnetm()
             self.body = model.body
 
         

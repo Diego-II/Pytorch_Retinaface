@@ -69,7 +69,7 @@ cfg_tresnet = {
     'clip': False,
     'loc_weight': 2.0,
     'gpu_train': True,
-    'batch_size':32,
+    'batch_size':2,
     'ngpu': 1,
     'epoch': 150,
     'decay1': 190,
