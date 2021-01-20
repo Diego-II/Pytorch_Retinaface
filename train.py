@@ -117,7 +117,6 @@ with torch.no_grad():
 
 def train():
     net.train()
-    net.cuda()
     epoch = 0 + args.resume_epoch
     print('Loading Dataset...')
 
@@ -153,17 +152,9 @@ def train():
         targets = [anno.cuda() for anno in targets]
 
         # forward
-        out = net(images.cuda())
+        out = net(images)
 
-        # backprop
-        if args.sam:
-            # optimizer.first_step(zero_grad=True)
-            pass
-        else:
-            optimizer.zero_grad()
-        
-        # print(f'Oout size = {out.size}')
-        # print(f'Oout size = {targets.size}')
+        optimizer.zero_grad()        
         loss_l, loss_c, loss_landm = criterion(out, priors, targets)
         loss = cfg['loc_weight'] * loss_l + loss_c + loss_landm
         loss.backward()
