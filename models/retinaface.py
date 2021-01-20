@@ -13,8 +13,8 @@ from models.net import MobileNetV1 as MobileNetV1
 def load_tresnetm():
     import timm
 
-    m = timm.create_model('tresnet_m_448', pretrained=True)
-    model = m.forward_features
+    model = timm.create_model('tresnet_m_448', pretrained=True)
+    
 
     return model
 
@@ -127,7 +127,10 @@ class RetinaFace(nn.Module):
         return landmarkhead
 
     def forward(self,inputs):
-        out = self.body(inputs)
+        if cfg['name'] == 'tresnet':
+            out = self.body.forward_features(inputs)
+        else:
+            out = self.body(inputs)
 
         # FPN
         fpn = self.fpn(out)
