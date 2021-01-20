@@ -84,8 +84,8 @@ class RetinaFace(nn.Module):
             backbone = models.resnet50(pretrained=cfg['pretrain'])
 
         elif cfg['name'] == 'tresnet':
-            model = load_tresnetm()
-            # self.body = model.body
+            self.body = load_tresnetm()
+            
 
         
         if cfg['name'] == 'mobilenet0.25' or cfg['name'] == 'Resnet50':
