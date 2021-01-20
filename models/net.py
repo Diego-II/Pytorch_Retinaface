@@ -80,7 +80,8 @@ class FPN(nn.Module):
 
     def forward(self, x):
         # names = list(input.keys())
-        input = list(x.values())
+        ins = torch.clone(x)
+        input = list(ins.values())
 
         output1 = self.output1(input[0])
         output2 = self.output2(input[1])
