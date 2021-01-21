@@ -6,7 +6,7 @@ import torch.backends.cudnn as cudnn
 import argparse
 import torch.utils.data as data
 from sam.sam import SAM
-from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_tresnet
+from data import WiderFaceDetection, detection_collate, preproc, cfg_mnet, cfg_re50, cfg_tresnet, cfg_res2net
 from layers.modules import MultiBoxLoss
 import layers.modules.optim as my_optim
 from layers.functions.prior_box import PriorBox
@@ -43,6 +43,8 @@ elif args.network == "resnet50":
     cfg = cfg_re50
 elif args.network == 'tresnet':
     cfg = cfg_tresnet
+elif args.network == 'res2net':
+    cfg = cfg_res2net
 
 rgb_mean = (104, 117, 123) # bgr order
 num_classes = 2

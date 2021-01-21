@@ -85,6 +85,11 @@ class RetinaFace(nn.Module):
 
         elif cfg['name'] == 'tresnet':
             self.body = load_tresnetm()
+
+        elif cfg['name'] == 'Res2Net':
+            from res2net import res2net50
+            model = res2net50(pretrained=True)
+            self.body = _utils.IntermediateLayerGetter(model, cfg['return_layers'])
             
 
         
@@ -127,10 +132,7 @@ class RetinaFace(nn.Module):
         return landmarkhead
 
     def forward(self,inputs):
-        if self.cfg['name'] == 'tresnet':
-            out = self.body.forward_features(inputs)
-        else:
-            out = self.body(inputs)
+        out = self.body(inputs)
 
         # FPN
         fpn = self.fpn(out)
