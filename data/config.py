@@ -48,7 +48,7 @@ cfg_res2net = {
     'clip': False,
     'loc_weight': 2.0,
     'gpu_train': True,
-    'batch_size': 24,
+    'batch_size': 16,
     'ngpu': 32,
     'epoch': 150,
     'decay1': 70,
