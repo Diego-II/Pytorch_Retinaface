@@ -3,7 +3,7 @@ import math
 import torch.utils.model_zoo as model_zoo
 import torch
 import torch.nn.functional as F
-__all__ = ['Res2Net', 'res2net50']
+# __all__ = ['Res2Net', 'res2net50',]
 
 
 model_urls = {
