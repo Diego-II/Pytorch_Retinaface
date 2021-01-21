@@ -87,8 +87,8 @@ class RetinaFace(nn.Module):
             self.body = load_tresnetm()
 
         elif cfg['name'] == 'Res2Net':
-            from res2net import res2net50
-            model = res2net50(pretrained=True)
+            from res2net import res2net50_26w_4s
+            model = res2net50_26w_4s(pretrained=True)
             self.body = _utils.IntermediateLayerGetter(model, cfg['return_layers'])
             
 
