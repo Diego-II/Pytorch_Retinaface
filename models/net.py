@@ -83,9 +83,9 @@ class FPN(nn.Module):
         # names = list(input.keys())
         # ins = torch.clone(x)
         if self.cfg['name'] == 'effnet':
-            output1 = self.output1(input[0])
-            output2 = self.output2(input[2])
-            output3 = self.output3(input[3])
+            output1 = self.output1(input[2])
+            output2 = self.output2(input[3])
+            output3 = self.output3(input[-1])
         else:
             input = list(input.values())
 
