@@ -14,7 +14,7 @@ import time
 import datetime
 import math
 from models.retinaface import RetinaFace
-from adamp import SGDP
+from adamp import SGDP, AdamP
 
 
 
@@ -104,6 +104,9 @@ elif args.optimizer == 'SDG' and args.sam:
     optimizer = SAM(net.parameters(), base_optimizer, lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 elif args.optimizer == 'SDGP':
     optimizer = SGDP(net.parameters(), lr=0.1, weight_decay=1e-5, momentum=0.9, nesterov=True)
+elif args.optimizer == 'ADAMP':
+    optimizer = AdamP(params, lr=0.01, betas=(0.9, 0.999), weight_decay=1e-2)
+
 else:
     optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 
