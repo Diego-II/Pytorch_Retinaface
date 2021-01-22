@@ -82,7 +82,7 @@ class FPN(nn.Module):
     def forward(self, input):
         # names = list(input.keys())
         # ins = torch.clone(x)
-        if self.cfg['name'] == 'tresnet':
+        if self.cfg['name'] == 'effnet':
             output1 = self.output1(input[2])
             output2 = self.output2(input[3])
             output3 = self.output3(input[-1])

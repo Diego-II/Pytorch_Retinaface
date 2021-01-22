@@ -10,17 +10,10 @@ from models.net import FPN as FPN
 from models.net import SSH as SSH
 from models.net import MobileNetV1 as MobileNetV1
 
-def load_tresnetm():
+def load_effnetm():
     import timm
-
     model = timm.create_model('tf_efficientnet_b5', features_only=True, pretrained=True)
     return model
-
-def load_eff_net():
-    from efficientnet_pytorch import EfficientNet
-    model = EfficientNet.from_pretrained('efficientnet-b5')
-    return model
-
 
 class ClassHead(nn.Module):
     def __init__(self,inchannels=512,num_anchors=3):
@@ -81,8 +74,8 @@ class RetinaFace(nn.Module):
             import torchvision.models as models
             backbone = models.resnet50(pretrained=cfg['pretrain'])
 
-        elif cfg['name'] == 'tresnet':
-            self.body = load_tresnetm()
+        elif cfg['name'] == 'effnet':
+            self.body = load_effnetm()
 
         elif cfg['name'] == 'Res2Net':
             from .res2net import res2net101_26w_4s
@@ -101,7 +94,7 @@ class RetinaFace(nn.Module):
             in_channels_stage2 * 4,
             in_channels_stage2 * 8,
         ]
-        if cfg['name'] == 'tresnet':
+        if cfg['name'] == 'effnet':
             in_channels_list = [64, 176, 512]
         
         out_channels = cfg['out_channel']
