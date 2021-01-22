@@ -66,8 +66,9 @@ class SSH(nn.Module):
         return out
 
 class FPN(nn.Module):
-    def __init__(self,in_channels_list,out_channels):
+    def __init__(self,in_channels_list,out_channels, cfg):
         super(FPN,self).__init__()
+        self.cfg = cfg
         leaky = 0
         if (out_channels <= 64):
             leaky = 0.1
@@ -81,14 +82,16 @@ class FPN(nn.Module):
     def forward(self, input):
         # names = list(input.keys())
         # ins = torch.clone(x)
-        if type(input) is list:
-            pass
+        if cfg['name'] = 'tresnet':
+            output1 = self.output1(input[2])
+            output2 = self.output2(input[3])
+            output3 = self.output3(input[6])
         else:
             input = list(input.values())
 
-        output1 = self.output1(input[0])
-        output2 = self.output2(input[1])
-        output3 = self.output3(input[2])
+            output1 = self.output1(input[0])
+            output2 = self.output2(input[1])
+            output3 = self.output3(input[2])
 
         up3 = F.interpolate(output3, size=[output2.size(2), output2.size(3)], mode="nearest")
         output2 = output2 + up3
