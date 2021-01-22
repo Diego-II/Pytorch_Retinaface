@@ -69,7 +69,7 @@ cfg_efficient_net = {
     'clip': False,
     'loc_weight': 2.0,
     'gpu_train': True,
-    'batch_size':24,
+    'batch_size':16,
     'ngpu': 1,
     'epoch': 150,
     'decay1': 190,
