@@ -97,6 +97,6 @@ cfg_tresnet = {
     'image_size': 448,
     'pretrain': True,
     'return_layers': {'reduction_1': 1, 'reduction_3': 2, 'reduction_5': 3},
-    'in_channel': 32,
+    'in_channel': 12,
     'out_channel': 64
 }
