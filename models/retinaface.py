@@ -95,7 +95,7 @@ class RetinaFace(nn.Module):
             in_channels_stage2 * 8,
         ]
         if cfg['name'] == 'effnet':
-            in_channels_list = [64, 176, 512]
+            in_channels_list = [24, 64, 128]
         
         out_channels = cfg['out_channel']
         self.fpn = FPN(in_channels_list,out_channels, cfg)
