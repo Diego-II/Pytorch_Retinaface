@@ -13,9 +13,7 @@ from models.net import MobileNetV1 as MobileNetV1
 def load_tresnetm():
     import timm
 
-    model = timm.create_model('res2net101_26w_4s', pretrained=True)
-    
-
+    model = timm.create_model('tf_efficientnet_b5', features_only=True, pretrained=True)
     return model
 
 def load_eff_net():
