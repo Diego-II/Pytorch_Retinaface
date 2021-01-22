@@ -85,7 +85,7 @@ class FPN(nn.Module):
         if self.cfg['name'] == 'tresnet':
             output1 = self.output1(input[2])
             output2 = self.output2(input[3])
-            output3 = self.output3(input[6])
+            output3 = self.output3(input[-1])
         else:
             input = list(input.values())
 
