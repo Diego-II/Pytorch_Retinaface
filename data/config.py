@@ -71,7 +71,7 @@ cfg_efficient_net = {
     'gpu_train': True,
     'batch_size':12,
     'ngpu': 1,
-    'epoch': 150,
+    'epoch': 100,
     'decay1': 190,
     'decay2': 220,  
     'image_size': 640,
